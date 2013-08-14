@@ -276,7 +276,7 @@ function pfValidIP( $sourceIP )
 {
     // Variable initialization
     $validHosts = array(
-        'www.payfast.local',
+        'www.payfast.co.za',
         'sandbox.payfast.co.za',
         'w1w.payfast.co.za',
         'w2w.payfast.co.za',

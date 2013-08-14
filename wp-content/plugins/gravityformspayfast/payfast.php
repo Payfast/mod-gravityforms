@@ -40,8 +40,8 @@ class GFPayFast {
     private static $slug = "gravityformspayfast";
     private static $version = "1.0.1";
     private static $min_gravityforms_version = "1.6.4";
-    private static $production_url = "https://www.payfast.local/eng/process/";
-    private static $sandbox_url = "https://sandbox.payfast.local/eng/process/";
+    private static $production_url = "https://www.payfast.co.za/eng/process/";
+    private static $sandbox_url = "https://sandbox.payfast.co.za/eng/process/";
     private static $supported_fields = array("checkbox", "radio", "select", "text", "website", "textarea", "email", "hidden", "number", "phone", "multiselect", "post_title",
                                     "post_tags", "post_custom_field", "post_content", "post_excerpt");
 
@@ -2061,7 +2061,7 @@ class GFPayFast {
         {
             pflog( 'Verify data received' );
             self::log_debug( 'Verify data received' );
-            $pfHost = ($config['meta']['sandbox']=='sandbox' ? 'sandbox' : 'www').'.payfast.local';
+            $pfHost = ($config['meta']['sandbox']=='sandbox' ? 'sandbox' : 'www').'.payfast.co.za';
             $pfValid = pfValidData( $pfHost, $pfParamString );
 
             if( $pfValid )
