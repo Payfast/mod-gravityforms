@@ -1,4 +1,4 @@
-PayFast WP Gravity Forms Add-on for WP Gravity Forms v1.7.7
+PayFast Add-on for Gravity Forms v1.7.7
 ------------------------------------------------------------------------------
 Copyright (c) 2010-2013 PayFast (Pty) Ltd
 
@@ -17,10 +17,10 @@ License for more details.
 Please see http://www.opensource.org/licenses/ for a copy of the GNU Lesser
 General Public License.
 
-******************************************************************************
-*                                                                            *
-*    Please see the URL below for all information concerning this module:    *
-*                                                                            *
-*            http://www.payfast.co.za/developers/gravity_forms               *
-*                                                                            *
-******************************************************************************
+***************************************************************************
+*                                                                         *
+*   Please see the URL below for all information concerning this module:  *
+*                                                                         *
+*          http://www.payfast.co.za/developers/gravity_forms              *
+*                                                                         *
+***************************************************************************
