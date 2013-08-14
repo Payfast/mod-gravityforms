@@ -402,6 +402,7 @@ class GFPayFast {
 
             if(get_option("gf_payfast_settings")){
                 ?>
+                <a class="button add-new-h2" href="admin.php?page=gf_payfast&view=stats"><?php _e("View Statistics", "gravityformspayfast") ?></a>
                 <a class="button add-new-h2" href="admin.php?page=gf_payfast&view=edit&id=0"><?php _e("Add New", "gravityformspayfast") ?></a>
                 <?php
             }
