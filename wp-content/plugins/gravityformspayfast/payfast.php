@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms PayFast Add-On
 Plugin URI: http://www.payfast.co.za/s/std/gravity_forms
 Description: Integrates Gravity Forms with PayFast, enabling end users to purchase goods and services through Gravity Forms.
-Version: 1.0.0
+Version: 1.0.1
 Author: Ron Darby
 Author URI: http://www.payfast.co.za
 
@@ -38,7 +38,7 @@ class GFPayFast {
     private static $path = "gravityformspayfast/payfast.php";
     private static $url = "http://www.gravityforms.com";
     private static $slug = "gravityformspayfast";
-    private static $version = "1.0.0";
+    private static $version = "1.0.1";
     private static $min_gravityforms_version = "1.6.4";
     private static $production_url = "https://www.payfast.local/eng/process/";
     private static $sandbox_url = "https://sandbox.payfast.local/eng/process/";
