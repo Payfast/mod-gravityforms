@@ -2238,7 +2238,7 @@ class GFPayFast {
 
     private static function get_product_query_string($form, $entry){
       
-        $products = GFCommon::get_product_fields($form, $entry, true);       
+        $products = GFCommon::get_product_fields($form, $entry);       
         $total = 0;
         $discount = 0;
 
