@@ -2238,23 +2238,36 @@ class GFPayFast {
 
     private static function get_product_query_string($form, $entry){
       
-        $products = GFCommon::get_product_fields($form, $entry);       
+        $fields = "";
+        $products = GFCommon::get_product_fields($form, $entry, true);
+        $product_index = 1;
         $total = 0;
         $discount = 0;
 
-        foreach($products["products"] as $product){           
-            $price = GFCommon::to_number($product["price"]);        
-           
-            if($price > 0)
-            {                
-                $total += $price * $product['quantity'];
+        foreach($products["products"] as $product){
+            $option_fields = "";
+            $price = GFCommon::to_number($product["price"]); 
             
+            if(is_array(rgar($product,"options")))
+            {
+                $option_index = 1;
+                foreach( $product["options"] as $option)
+                {
+                    $price += GFCommon::to_number($option["price"]);                    
+                }
+            }
+
+            $name = urlencode($product["name"]);
+            if($price > 0)
+            {
+                $total += $price * $product['quantity'];               
             }
             else{
                 $discount += abs($price) * $product['quantity'];
             }
 
         }
+
         $total = !empty($products["shipping"]["price"]) ? $products["shipping"]["price"]+$total : $total;
         $total = $discount > 0 ? $total - $discount : $total;        
         
