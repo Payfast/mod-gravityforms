@@ -1,6 +1,6 @@
-PayFast Add-on for Gravity Forms v1.7.7
+PayFast Add-on for Gravity Forms v1.9.9
 ------------------------------------------------------------------------------
-Copyright (c) 2010-2013 PayFast (Pty) Ltd
+Copyright (c) 2010-2015 PayFast (Pty) Ltd
 
 LICENSE:
  
