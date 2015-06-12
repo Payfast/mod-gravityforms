@@ -30,9 +30,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 define( 'GF_PAYFAST_VERSION', '1.1' );
 
-add_action( 'gform_loaded', array( 'GF_PayPal_Bootstrap', 'load' ), 5 );
+add_action( 'gform_loaded', array( 'GF_PayFast_Bootstrap', 'load' ), 5 );
 
-class GF_PayPal_Bootstrap
+class GF_PayFast_Bootstrap
 {
 	public static function load()
     {
