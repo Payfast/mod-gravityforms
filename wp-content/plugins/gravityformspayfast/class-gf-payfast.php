@@ -638,6 +638,7 @@ class GFPayFast extends GFPaymentAddOn
         }
 
         $varArray['signature'] = md5( $pfOutput );
+        $varArray['user_agent'] = 'Gravity Forms 1.9';
 
         //    $url .= "?notify_url={$itn_url}&charset=UTF-8&currency_code={$currency}&business={$business_email}&custom={$custom_field}{$invoice}{$customer_fields}{$page_style}{$continue_text}{$cancel_url}{$disable_note}{$disable_shipping}{$return_url}";
         $query_string = '';
