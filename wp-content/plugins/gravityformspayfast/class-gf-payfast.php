@@ -63,7 +63,7 @@ class GFPayFast extends GFPaymentAddOn
             __( 'You will need a PayFast account in order to use the PayFast Add-On.', 'gravityformspayfast' ) .
             '</p>
 			<ul>
-				<li>' . sprintf( __( 'Go to the %sPayFast Website%s in order to register an account.', 'gravityformspayfast' ), '<a href="https://www.payfast.page" target="_blank">', '</a>' ) . '</li>' .
+				<li>' . sprintf( __( 'Go to the %sPayFast Website%s in order to register an account.', 'gravityformspayfast' ), '<a href="https://www.payfast.co.za" target="_blank">', '</a>' ) . '</li>' .
             '<li>' . __( 'Check \'I understand\' and click on \'Update Settings\' in order to proceed.', 'gravityformspayfast' ) . '</li>' .
             '</ul>
 				<br/>';
@@ -595,7 +595,7 @@ class GFPayFast extends GFPaymentAddOn
         $return_url = $this->return_url( $form['id'], $entry['id'] ) . "&rm={$return_mode}";
 
         //Cancel URL
-        $cancel_url = ! empty( $feed['meta']['cancelUrl'] ) ? $feed['meta']['cancelUrl'] : 'https://www.payfast.page';
+        $cancel_url = ! empty( $feed['meta']['cancelUrl'] ) ? $feed['meta']['cancelUrl'] : '';
 
         //Don't display note section
         $disable_note = ! empty( $feed['meta']['disableNote'] ) ? '&no_note=1' : '';
