@@ -1,6 +1,5 @@
 <?php
 
-add_action('parse_request', array("GFPayFast", "process_itn"));
 add_action( 'wp', array( 'GFPayFast', 'maybe_thankyou_page' ), 5 );
 
 GFForms::include_payment_addon_framework();
@@ -1295,8 +1294,11 @@ class GFPayFast extends GFPaymentAddOn
         {
             return false;
         }
-
-        return true;
+        else
+        {
+            $this->process_itn();
+            return true;
+        }    
     }
 
     private function get_pending_reason( $code )
