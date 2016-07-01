@@ -24,7 +24,7 @@
 //// Create user agent string
 // User agent constituents (for cURL)
 define( 'PF_SOFTWARE_NAME', 'GravityForms' );
-define( 'PF_SOFTWARE_VER', "1.7.7" );
+define( 'PF_SOFTWARE_VER', "1.9.*" );
 define( 'PF_MODULE_NAME', 'PayFast-GravityForms' );
 define( 'PF_MODULE_VER', '1.0.1' );
 
@@ -162,7 +162,7 @@ function pfValidSignature( $pfData = null, &$pfParamString = null, $passPhrase =
 
     // Remove the last '&' from the parameter string
     $pfParamString = substr( $pfParamString, 0, -1 );
-    if ( is_null( $passPhrase ) ||  $feed['meta']['mode'] != 'production' )
+    if ( is_null( $passPhrase ) /*||  $feed['meta']['mode'] != 'production'*/ )
     {
         $tempParamString = $pfParamString;
     }

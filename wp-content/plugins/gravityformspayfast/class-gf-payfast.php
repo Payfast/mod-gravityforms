@@ -612,13 +612,18 @@ class GFPayFast extends GFPaymentAddOn
         $varArray = array(
             'merchant_id' => $merchant_id,
             'merchant_key' => $merchant_key,
-            'return_url' => $return_url,
-            'cancel_url' => $cancel_url,
-            'notify_url' => $itn_url,
-            'm_payment_id' => $entry['id'],
-            'amount' => GFCommon::get_order_total($form, $entry),
-            'item_name' => $form['title']
+            'return_url' => $return_url
         );
+
+        if ( !empty( $cancel_url ) )
+        {
+            $varArray['cancel_url'] = $cancel_url;
+        }
+
+        $varArray['notify_url'] = $itn_url;
+        $varArray['m_payment_id'] = $entry['id'];
+        $varArray['amount'] = GFCommon::get_order_total($form, $entry);
+        $varArray['item_name'] = $form['title'];
 
         $pfOutput = '';
         // Create output string
@@ -636,9 +641,8 @@ class GFPayFast extends GFPaymentAddOn
             $pfOutput = $pfOutput."passphrase=".urlencode( $passPhrase );
         }
 
-        $varArray['signature'] = md5( $pfOutput );
-        $varArray['user_agent'] = 'Gravity Forms 1.9';
-
+        $sig = md5( $pfOutput );
+        
         //    $url .= "?notify_url={$itn_url}&charset=UTF-8&currency_code={$currency}&business={$business_email}&custom={$custom_field}{$invoice}{$customer_fields}{$page_style}{$continue_text}{$cancel_url}{$disable_note}{$disable_shipping}{$return_url}";
         $query_string = '';
 
@@ -672,7 +676,7 @@ class GFPayFast extends GFPaymentAddOn
         $secureSig = md5( $query_string );
         $secureString .= '&signature='.$secureSig;
 
-        $url .= $query_string;
+    //    $url .= $query_string;
 
 
 
@@ -685,13 +689,10 @@ class GFPayFast extends GFPaymentAddOn
             return '';
         }
 
-        $url .= $query_string;
+        $url .= $query_string.'&signature='. $sig . '&user_agent=Gravity Forms 1.9';
 
     //    $url = apply_filters( "gform_payfast_request_{$form['id']}", apply_filters( 'gform_payfast_request', $url, $form, $entry, $feed ), $form, $entry, $feed );
         
-        //add the bn code (build notation code)
-        $url .= '&bn=Rocketgenius_SP';
-
         $this->log_debug( __METHOD__ . "(): Sending to PayFast: {$url}" );
 
         return $url;
@@ -1080,6 +1081,8 @@ class GFPayFast extends GFPaymentAddOn
         $amount = $pfData['amount_gross'];
         $entry['id'] = $pfData['m_payment_id'];
 
+        $feed = $this->get_payment_feed( $_POST['m_payment_id'] );
+
 
     //    $this->log_debug( __METHOD__ . "(): Payment status: {$status} - Transaction Type: {$transaction_type} - Transaction ID: {$transaction_id} - Parent Transaction: {$parent_transaction_id} - Subscriber ID: {$subscriber_id} - Amount: {$amount} - Pending reason: {$pending_reason} - Reason: {$reason}" );
 
@@ -1135,8 +1138,11 @@ class GFPayFast extends GFPaymentAddOn
             {
                 pflog( 'Verify security signature' );
 
+                $passPhrase = $feed['meta']['passphrase'];
+                $pfPassPhrase = empty( $passPhrase ) ? null : $passPhrase;
+
                 // If signature different, log for debugging
-                if( !pfValidSignature( $pfData, $pfParamString ) )
+                if( !pfValidSignature( $pfData, $pfParamString, $pfPassPhrase ) )
                 {
                     $pfError = true;
                     $pfErrMsg = PF_ERR_INVALID_SIGNATURE;
@@ -1175,11 +1181,6 @@ class GFPayFast extends GFPaymentAddOn
                 if( $pfValid )
                 {
                     self::log_debug("ITN message successfully verified by PayFast");
-                }
-                else
-                {
-                    $pfError = true;
-                    $pfErrMsg = PF_ERR_BAD_ACCESS;
                 }
             }
 
