@@ -641,7 +641,7 @@ class GFPayFast extends GFPaymentAddOn
         $secureString = '?';
         foreach( $varArray as $k => $v )
         {
-            if( !empty ( $v ) )
+            if( !is_null ( $v ) )
                 $secureString .= $k.'='.urlencode( trim( $v ) ).'&';
         }
         $secureString = substr( $secureString, 0, -1 );
