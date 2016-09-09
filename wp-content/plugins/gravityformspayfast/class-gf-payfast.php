@@ -593,6 +593,10 @@ class GFPayFast extends GFPaymentAddOn
         $varArray['amount'] = GFCommon::get_order_total($form, $entry);
         $varArray['item_name'] = $form['title'];
 
+        if ( $feed['meta']['mode'] != 'production' )
+        {
+            $varArray['custom_int1'] = '1';
+        }
 
         // Include variables if subscription
         if ( $feed['meta']['transactionType'] == 'subscription' )
@@ -1082,7 +1086,14 @@ class GFPayFast extends GFPaymentAddOn
         {
             pflog( 'Verify data received' );
             self::log_debug( 'Verify data received' );
-            $pfHost = ($config['meta']['sandbox']=='sandbox' ? 'sandbox' : 'www').'.payfast.co.za';
+
+            $pfHost = 'www.payfast.co.za';
+
+            if ( $pfData['custom_int1'] == 1 )
+            {
+                $pfHost = 'sandbox.payfast.co.za';
+            }
+
             $pfValid = pfValidData( $pfHost, $pfParamString );
             if( $pfValid )
             {
