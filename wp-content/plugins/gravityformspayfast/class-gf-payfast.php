@@ -167,16 +167,8 @@ class GFPayFast extends GFPaymentAddOn
         $default_settings            = $this->replace_field( 'transactionType', $transaction_type, $default_settings );
         //-------------------------------------------------------------------------------------------------
 
-        //--add Page Style, Continue Button Label, Cancel URL
+        //--add Page Style, Cancel URL
         $fields = array(
-            array(
-                'name'     => 'continueText',
-                'label'    => __( 'Continue Button Label', 'gravityformspayfast' ),
-                'type'     => 'text',
-                'class'    => 'medium',
-                'required' => false,
-                'tooltip'  => '<h6>' . __( 'Continue Button Label', 'gravityformspayfast' ) . '</h6>' . __( 'Enter the text that should appear on the continue button once payment has been completed via PayFast.', 'gravityformspayfast' )
-            ),
             array(
                 'name'     => 'cancelUrl',
                 'label'    => __( 'Cancel URL', 'gravityformspayfast' ),
