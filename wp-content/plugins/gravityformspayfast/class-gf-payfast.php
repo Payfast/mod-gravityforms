@@ -569,6 +569,8 @@ class GFPayFast extends GFPaymentAddOn
         }
 
         $custom_field = $entry['id'] . '|' . wp_hash($entry['id']);
+        $pfNotifications = rgars( $feed, 'meta/selectedNotifications' );
+
         $varArray = array(
             'merchant_id' => $merchant_id,
             'merchant_key' => $merchant_key,
@@ -590,10 +592,22 @@ class GFPayFast extends GFPaymentAddOn
             $varArray['custom_int1'] = '1';
         }
 
+        $varArray['custom_int2'] = $form['id'];
+
+        if ( !is_null( $pfNotifications[0] ) )
+        {
+            $varArray['custom_str1'] = $pfNotifications[0];
+        }
+
+        if ( !is_null( $pfNotifications[1] ) )
+        {
+            $varArray['custom_str2'] = $pfNotifications[1];
+        }
+
         // Include variables if subscription
         if ( $feed['meta']['transactionType'] == 'subscription' )
         {
-            $varArray['custom_str1'] = gmdate( 'Y-m-d' );
+            $varArray['custom_str3'] = gmdate( 'Y-m-d' );
             $varArray['subscription_type'] = 1;
             $varArray['billing_date'] = gmdate( 'Y-m-d' );
             $varArray['recurring_amount'] = GFCommon::get_order_total($form, $entry);
@@ -999,7 +1013,7 @@ class GFPayFast extends GFPaymentAddOn
         //    $this->log_debug( __METHOD__ . "(): Payment status: {$status} - Transaction Type: {$transaction_type} - Transaction ID: {$transaction_id} - Parent Transaction: {$parent_transaction_id} - Subscriber ID: {$subscriber_id} - Amount: {$amount} - Pending reason: {$pending_reason} - Reason: {$reason}" );
         $action = array();
 
-        $feed = $this->get_payment_feed( $_POST['m_payment_id'] );
+        $feed = $this->get_payment_feed( $pfData['m_payment_id'], true );
 
         //handles products and donation
         self::log_debug("ITN request received. Starting to process...");
@@ -1101,13 +1115,31 @@ class GFPayFast extends GFPaymentAddOn
         if( !$pfError && !$pfDone )
         {
             pflog('Check status and update order');
+            $sendAdminMail = false;
+            $sendUserMail = false;
+            $entry = GFAPI::get_entry( $pfData['m_payment_id'] );
+            $form = GFFormsModel::get_form_meta( $pfData['custom_int2'] );
+            $notifications = GFCommon::get_notifications( 'form_submission', $form );
+
+            if ( !empty( $pfData['custom_str1'] ) )
+            {
+                $sendAdminMail = true;
+                $notificationAdminId = array( $pfData['custom_str1'] );
+            }
+
+            if ( !empty( $pfData['custom_str2'] ) )
+            {
+                $sendUserMail = true;
+                $notificationClientId = array( $pfData['custom_str2'] );
+            }
+
             //    self::log_debug('Check status and update order');
             switch ($pfData['payment_status'])
             {
                 case 'COMPLETE' :
                     pflog( '- Complete' );
                     //creates transaction
-                    if ( empty( $pfData['token'] ) || strtotime( $pfData['custom_str1'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
+                    if ( empty( $pfData['token'] ) || strtotime( $pfData['custom_str3'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
                     {
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'payment_status', 'Paid');
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'transaction_id', $pfData['pf_payment_id']);
@@ -1117,12 +1149,12 @@ class GFPayFast extends GFPaymentAddOn
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'payment_date', gmdate('y-m-d H:i:s'));
                     }
 
-                    if ( !empty( $pfData['token'] ) && strtotime( $pfData['custom_str1'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
+                    if ( !empty( $pfData['token'] ) && strtotime( $pfData['custom_str3'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
                     {
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'transaction_type', '2');
                         GFPaymentAddOn::insert_transaction($pfData['m_payment_id'], 'create_subscription', $pfData['pf_payment_id'], $pfData['amount_gross']);
                     }
-                    if ( !empty( $pfData['token'] ) && strtotime( gmdate( 'Y-m-d' ) ) > strtotime( $pfData['custom_str1'] . '+ 2 days' ) )
+                    if ( !empty( $pfData['token'] ) && strtotime( gmdate( 'Y-m-d' ) ) > strtotime( $pfData['custom_str3'] . '+ 2 days' ) )
                     {
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'transaction_type', '1');
                         GFPaymentAddOn::insert_transaction($pfData['m_payment_id'], 'complete_payment', $pfData['pf_payment_id'], $pfData['amount_gross']);
@@ -1137,6 +1169,17 @@ class GFPayFast extends GFPaymentAddOn
                         GFPaymentAddOn::insert_transaction( $pfData['m_payment_id'], 'payment'/*$action['transaction_type']*/, $pfData['pf_payment_id']/*$transaction_id*/, $pfData['amount_gross']/*$action['amount']*/ );
                         $action['note']   = sprintf( esc_html__( 'Subscription has been paid. Amount: R%s. Subscription Id: %s', 'gravityforms' ), $pfData['amount_gross'], $pfData['m_payment_id'] );
                         GFFormsModel::add_note( $pfData['m_payment_id']/*$entry_id*/, 0, 'PayFast', $action['note'], 'success' );
+                    }
+
+                    if ( $sendAdminMail )
+                    {
+                        pflog('sendadminmail');
+                        GFCommon::send_notifications( $notificationAdminId, $form, $entry, true, 'form_submission' );
+                    }
+                    if ( $sendUserMail )
+                    {
+                        pflog('sendusermail');
+                        GFCommon::send_notifications( $notificationClientId, $form, $entry, true, 'form_submission' );
                     }
 
                     break;
