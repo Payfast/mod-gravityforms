@@ -1138,6 +1138,10 @@ class GFPayFast extends GFPaymentAddOn
             {
                 case 'COMPLETE' :
                     pflog( '- Complete' );
+
+                    //If delayed post set it now
+                    $entry['post_id'] = GFFormsModel::create_post( $form, $entry );
+                    
                     //creates transaction
                     if ( empty( $pfData['token'] ) || strtotime( $pfData['custom_str3'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
                     {
