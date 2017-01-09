@@ -604,10 +604,15 @@ class GFPayFast extends GFPaymentAddOn
             $varArray['custom_str2'] = $pfNotifications[1];
         }
 
+        if ( rgars( $feed, 'meta/delayPost' ) )
+        {
+            $varArray['custom_str3'] = 'delayPost';
+        }
+
         // Include variables if subscription
         if ( $feed['meta']['transactionType'] == 'subscription' )
         {
-            $varArray['custom_str3'] = gmdate( 'Y-m-d' );
+            $varArray['custom_str4'] = gmdate( 'Y-m-d' );
             $varArray['subscription_type'] = 1;
             $varArray['billing_date'] = gmdate( 'Y-m-d' );
             $varArray['recurring_amount'] = GFCommon::get_order_total($form, $entry);
@@ -1140,10 +1145,13 @@ class GFPayFast extends GFPaymentAddOn
                     pflog( '- Complete' );
 
                     //If delayed post set it now
-                    $entry['post_id'] = GFFormsModel::create_post( $form, $entry );
+                    if ( $pfData['custom_str3'] == 'delayPost' )
+                    {
+                        $entry['post_id'] = GFFormsModel::create_post( $form, $entry );
+                    }
                     
                     //creates transaction
-                    if ( empty( $pfData['token'] ) || strtotime( $pfData['custom_str3'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
+                    if ( empty( $pfData['token'] ) || strtotime( $pfData['custom_str4'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
                     {
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'payment_status', 'Paid');
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'transaction_id', $pfData['pf_payment_id']);
@@ -1153,12 +1161,12 @@ class GFPayFast extends GFPaymentAddOn
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'payment_date', gmdate('y-m-d H:i:s'));
                     }
 
-                    if ( !empty( $pfData['token'] ) && strtotime( $pfData['custom_str3'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
+                    if ( !empty( $pfData['token'] ) && strtotime( $pfData['custom_str4'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
                     {
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'transaction_type', '2');
                         GFPaymentAddOn::insert_transaction($pfData['m_payment_id'], 'create_subscription', $pfData['pf_payment_id'], $pfData['amount_gross']);
                     }
-                    if ( !empty( $pfData['token'] ) && strtotime( gmdate( 'Y-m-d' ) ) > strtotime( $pfData['custom_str3'] . '+ 2 days' ) )
+                    if ( !empty( $pfData['token'] ) && strtotime( gmdate( 'Y-m-d' ) ) > strtotime( $pfData['custom_str4'] . '+ 2 days' ) )
                     {
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'transaction_type', '1');
                         GFPaymentAddOn::insert_transaction($pfData['m_payment_id'], 'complete_payment', $pfData['pf_payment_id'], $pfData['amount_gross']);
