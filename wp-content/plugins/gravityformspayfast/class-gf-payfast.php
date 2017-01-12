@@ -1161,6 +1161,13 @@ class GFPayFast extends GFPaymentAddOn
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'payment_date', gmdate('y-m-d H:i:s'));
                     }
 
+                    // Update single entry
+                    if ( empty( $pfData['token'] ) )
+                    {
+                        GFAPI::update_entry_property($pfData['m_payment_id'], 'transaction_type', '1');
+                        GFPaymentAddOn::insert_transaction($pfData['m_payment_id'], 'complete_payment', $pfData['pf_payment_id'], $pfData['amount_gross']);
+                    }
+
                     if ( !empty( $pfData['token'] ) && strtotime( $pfData['custom_str4'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
                     {
                         GFAPI::update_entry_property($pfData['m_payment_id'], 'transaction_type', '2');
