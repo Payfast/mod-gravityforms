@@ -1018,7 +1018,7 @@ class GFPayFast extends GFPaymentAddOn
         //    $this->log_debug( __METHOD__ . "(): Payment status: {$status} - Transaction Type: {$transaction_type} - Transaction ID: {$transaction_id} - Parent Transaction: {$parent_transaction_id} - Subscriber ID: {$subscriber_id} - Amount: {$amount} - Pending reason: {$pending_reason} - Reason: {$reason}" );
         $action = array();
 
-        $feed = $this->get_payment_feed( $pfData['m_payment_id'], true );
+        $feed = $this->get_feeds( $_POST['custom_int2'] );
 
         //handles products and donation
         self::log_debug("ITN request received. Starting to process...");
@@ -1065,7 +1065,7 @@ class GFPayFast extends GFPaymentAddOn
         {
             pflog( 'Verify security signature' );
 
-            $passPhrase = $feed['meta']['passphrase'];
+            $passPhrase = $feed[0]['meta']['passphrase'];
             $pfPassPhrase = empty( $passPhrase ) ? null : $passPhrase;
 
             // If signature different, log for debugging
