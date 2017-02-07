@@ -583,6 +583,7 @@ class GFPayFast extends GFPaymentAddOn
         }
 
         $varArray['notify_url'] = $itn_url;
+        $varArray['email_address'] = $this->customer_email($feed, $entry);
         $varArray['m_payment_id'] = $entry['id'];
         $varArray['amount'] = GFCommon::get_order_total($form, $entry);
         $varArray['item_name'] = $form['title'];
@@ -813,6 +814,23 @@ class GFPayFast extends GFPaymentAddOn
         //save payment amount to lead meta
         gform_update_meta( $entry_id, 'payment_amount', $payment_amount );
         return $payment_amount > 0 ? $query_string : false;
+    }
+
+    //customer email function
+    public function customer_email ( $feed, $lead )
+    {
+        $cutomer_email = '';
+        foreach ( $this->get_customer_fields() as $field )
+        {
+            $field_id = $feed['meta'][ $field['meta_name'] ];
+            $value = rgar( $lead, $field_id );
+            if ( !empty( $value ) && $field['name'] == 'email')
+            {
+                $cutomer_email = $value;
+            }
+        }
+
+        return $cutomer_email;
     }
 
     public function customer_query_string( $feed, $lead )
