@@ -25,9 +25,9 @@ If you followed the installation instructions above, the module is in “test”
 You will not be able to directly “test” a credit card, Instant EFT or Ukash payment in the sandbox, but you don’t really need to. The inputs to and outputs from PayFast are exactly the same, no matter which payment method is used, so using the wallet of the test user will give you exactly the same results as if you had used another payment method.
 
 ***************************************************************************
-*                                                                         *
-*   Please see the URL below for all information concerning this module:  *
-*                                                                         *
-*          https://www.payfast.co.za/shopping-carts/gravity-forms/        *
-*                                                                         *
+
+   Please see the URL below for all information concerning this module:
+
+          https://www.payfast.co.za/shopping-carts/gravity-forms/
+
 ***************************************************************************
