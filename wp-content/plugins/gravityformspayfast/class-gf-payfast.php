@@ -579,13 +579,15 @@ class GFPayFast extends GFPaymentAddOn
         
         if ( $feed['meta']['mode'] == 'test' && empty( $feed['meta']['payfastMerchantId'] ) && empty( $feed['meta']['payfastMerchantKey'] ) )
         {
-            $merchant_id = '10000100';
-            $merchant_key = '46f0cd694581a';
+            $merchant_id = '10004002';
+            $merchant_key = 'q1cd2rdny4a53';
+            $passPhrase = 'payfast';
         }
         else
         {
             $merchant_id = $feed['meta']['payfastMerchantId'];
             $merchant_key = $feed['meta']['payfastMerchantKey'];
+            $passPhrase = $feed['meta']['passphrase'];
         }
 
         $custom_field = $entry['id'] . '|' . wp_hash($entry['id']);
@@ -673,7 +675,6 @@ class GFPayFast extends GFPaymentAddOn
         // Create output string
         foreach ( $varArray as $key => $val )
             $pfOutput .= $key . '=' . urlencode( trim( $val ) ) . '&';
-        $passPhrase = $feed['meta']['passphrase'];
 
         if ( empty( $passPhrase ) )
         {
