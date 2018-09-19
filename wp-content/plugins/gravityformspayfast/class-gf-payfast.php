@@ -577,7 +577,7 @@ class GFPayFast extends GFPaymentAddOn
         //URL that will listen to notifications from PayFast
         $itn_url = get_bloginfo('url') . '/?page=gf_payfast_itn';
         
-        if ( $feed['meta']['mode'] == 'test' && empty( $feed['meta']['payfastMerchantId'] ) && empty( $feed['meta']['payfastMerchantKey'] ) )
+        if ( ( $feed['meta']['mode'] == 'test' ) and ( empty( $feed['meta']['payfastMerchantId'] ) ) or ( empty( $feed['meta']['payfastMerchantKey'] ) ) )
         {
             $merchant_id = '10004002';
             $merchant_key = 'q1cd2rdny4a53';
@@ -608,21 +608,18 @@ class GFPayFast extends GFPaymentAddOn
         $varArray['email_address'] = $this->customer_email($feed, $entry);
         $varArray['m_payment_id'] = $entry['id'];
 
-        if ( $feed['meta']['transactionType'] == 'subscription' )
+        if ( ( $feed['meta']['transactionType'] == 'subscription' ) and ( !$feed['meta']['initialAmount'] == 'form_total' ) and !empty($entry['' . $feed['meta']['initialAmount'] . '.2']) )
         {
-            if ( $feed['meta']['initialAmount'] == 'form_total' )
-            {
-                $varArray['amount'] = GFCommon::get_order_total( $form, $entry ) / 2;
-            }
-            else
-            {
-                $varArray['amount'] = substr( $entry['' . $feed['meta']['initialAmount'] . '.2'], 1 );
-            }
+            $varArray['amount'] = substr( $entry['' . $feed['meta']['initialAmount'] . '.2'], 1 );
+        }
+        else if ( ( $feed['meta']['transactionType'] == 'subscription' ) and !($feed['meta']['initialAmount'] == 'form_total' ) and !empty( $entry['' . $feed['meta']['initialAmount']] ) )
+        {
+            $varArray['amount'] = substr( $entry['' . $feed['meta']['initialAmount'] ], strpos($entry['' . $feed['meta']['initialAmount'] ] ,'|') + 1 );
         }
         else
         {
             $varArray['amount'] = GFCommon::get_order_total( $form, $entry );
-        }        
+        }       
         
         $varArray['item_name'] = $form['title'];
 
@@ -657,15 +654,19 @@ class GFPayFast extends GFPaymentAddOn
             $varArray['subscription_type'] = 1;
             $varArray['billing_date'] = gmdate( 'Y-m-d' );
 
-            if ( $feed['meta']['recurring_amount_field'] == 'form_total' )
-            {
-                $varArray['recurring_amount'] = GFCommon::get_order_total( $form, $entry ) / 2;
-            }
-            else
+            if ( ( !$feed['meta']['recurring_amount_field'] == 'form_total' ) and !empty($entry['' . $feed['meta']['recurring_amount_field'] . '.2']) )
             {
                 $varArray['recurring_amount'] = substr( $entry['' . $feed['meta']['recurring_amount_field'] . '.2'], 1 );
             }
-
+            else if ( !($feed['meta']['recurring_amount_field'] == 'form_total' ) and !empty( $entry['' . $feed['meta']['recurring_amount_field']] ) )
+            {
+                $varArray['recurring_amount'] = substr( $entry['' . $feed['meta']['recurring_amount_field'] ], strpos($entry['' . $feed['meta']['recurring_amount_field'] ] ,'|') + 1 );
+            }
+            else
+            {
+                $varArray['recurring_amount'] = GFCommon::get_order_total( $form, $entry );
+            }
+           
             $varArray['frequency'] = rgar($feed['meta'], 'frequency');
             $varArray['cycles'] = rgar($feed['meta'], 'cycles');
         }
