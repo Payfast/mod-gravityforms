@@ -8,7 +8,7 @@
 //// Create user agent string
 // User agent constituents (for cURL)
 define( 'PF_SOFTWARE_NAME', 'GravityForms' );
-define( 'PF_SOFTWARE_VER', "2.3.*" );
+define( 'PF_SOFTWARE_VER', '2.3.*' );
 define( 'PF_MODULE_NAME', 'PayFast-GravityForms' );
 define( 'PF_MODULE_VER', '1.3.0' );
 

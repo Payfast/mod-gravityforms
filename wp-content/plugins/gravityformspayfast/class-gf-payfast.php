@@ -630,7 +630,7 @@ class GFPayFast extends GFPaymentAddOn
 
         $varArray['custom_int2'] = $form['id'];
 
-        $varArray['custom_str1'] = 'PF_GRAVITYFORMS_2.3_'.constant( 'PF_MODULE_VER' );;
+        $varArray['custom_str1'] = 'PF_GRAVITYFORMS_2.3_'.constant( 'PF_MODULE_VER' );
 
         if ( !is_null( $pfNotifications[0] ) )
         {
@@ -1424,7 +1424,7 @@ class GFPayFast extends GFPaymentAddOn
         </script>
 
         <div class="wrap about-wrap">
-            <h1><?php _e( 'PayFast Add-On v1.1', 'gravityformspayfast' ) ?></h1>
+            <h1><?php _e( 'PayFast Add-On v'.constant( 'PF_MODULE_VER' ), 'gravityformspayfast' ) ?></h1>
             <div class="about-text"><?php _e( 'Thank you for updating! The new version of the Gravity Forms PayFast Add-On makes changes to how you manage your PayFast integration.', 'gravityformspayfast' ) ?></div>
             <div class="changelog">
                 <hr/>
