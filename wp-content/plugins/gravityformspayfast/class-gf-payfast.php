@@ -608,7 +608,7 @@ class GFPayFast extends GFPaymentAddOn
         $varArray['email_address'] = $this->customer_email($feed, $entry);
         $varArray['m_payment_id'] = $entry['id'];
 
-        if ( ( $feed['meta']['transactionType'] == 'subscription' ) and ( !$feed['meta']['initialAmount'] == 'form_total' ) and !empty($entry['' . $feed['meta']['initialAmount'] . '.2']) )
+        if ( ( $feed['meta']['transactionType'] == 'subscription' ) and !( $feed['meta']['initialAmount'] == 'form_total' ) and !empty($entry['' . $feed['meta']['initialAmount'] . '.2']) )
         {
             $varArray['amount'] = substr( $entry['' . $feed['meta']['initialAmount'] . '.2'], 1 );
         }
@@ -654,7 +654,7 @@ class GFPayFast extends GFPaymentAddOn
             $varArray['subscription_type'] = 1;
             $varArray['billing_date'] = gmdate( 'Y-m-d' );
 
-            if ( ( !$feed['meta']['recurring_amount_field'] == 'form_total' ) and !empty($entry['' . $feed['meta']['recurring_amount_field'] . '.2']) )
+            if ( !( $feed['meta']['recurring_amount_field'] == 'form_total' ) and !empty($entry['' . $feed['meta']['recurring_amount_field'] . '.2']) )
             {
                 $varArray['recurring_amount'] = substr( $entry['' . $feed['meta']['recurring_amount_field'] . '.2'], 1 );
             }
