@@ -10,7 +10,8 @@ Text Domain:  gravityformspayfast
 Domain Path:  /languages
 */
 
-define( 'GF_PAYFAST_VERSION', '1.1' );
+include 'payfast_common.inc';
+define( 'GF_PAYFAST_VERSION', PF_MODULE_VER );
 
 add_action( 'gform_loaded', array( 'GF_PayFast_Bootstrap', 'load' ), 5 );
 
