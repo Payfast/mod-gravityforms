@@ -8,9 +8,9 @@
 //// Create user agent string
 // User agent constituents (for cURL)
 define( 'PF_SOFTWARE_NAME', 'GravityForms' );
-define( 'PF_SOFTWARE_VER', '2.3.*' );
+define( 'PF_SOFTWARE_VER', '1.9.*' );
 define( 'PF_MODULE_NAME', 'PayFast-GravityForms' );
-define( 'PF_MODULE_VER', '1.3.0' );
+define( 'PF_MODULE_VER', '1.4.0' );
 
 // Features
 // - PHP
@@ -26,9 +26,8 @@ if( in_array( 'curl', get_loaded_extensions() ) )
 else
     $pfFeatures .= ' nocurl;';
 
-// Create user agrent
+// Create user agent
 define( 'PF_USER_AGENT', PF_SOFTWARE_NAME .'/'. PF_SOFTWARE_VER .' ('. trim( $pfFeatures ) .') '. PF_MODULE_NAME .'/'. PF_MODULE_VER );
-
 
 // General Defines
 define( 'PF_TIMEOUT', 15 );
@@ -50,7 +49,7 @@ define( 'PF_ERR_ORDER_PROCESSED', 'This order has already been processed' );
 define( 'PF_ERR_PDT_FAIL', 'PDT query failed' );
 define( 'PF_ERR_PDT_TOKEN_MISSING', 'PDT token not present in URL' );
 define( 'PF_ERR_SESSIONID_MISMATCH', 'Session ID mismatch' );
-define( 'PF_ERR_UNKNOWN', 'Unkown error occurred' );
+define( 'PF_ERR_UNKNOWN', 'Unknown error occurred' );
 
     // General
 define( 'PF_MSG_OK', 'Payment was successful' );
@@ -59,9 +58,6 @@ define( 'PF_MSG_PENDING',
     'The payment is pending. Please note, you will receive another Instant'.
     ' Transaction Notification when the payment status changes to'.
     ' "Completed", or "Failed"' );
-    
-
-
 
 /**
  * pflog
@@ -187,12 +183,12 @@ function pfValidData( $pfHost = 'www.payfast.co.za', $pfParamString = '' )
         // Create default cURL object
         $ch = curl_init();
     
-        // Set cURL options - Use curl_setopt for freater PHP compatibility
+        // Set cURL options - Use curl_setopt for greater PHP compatibility
         // Base settings
         curl_setopt( $ch, CURLOPT_USERAGENT, PF_USER_AGENT );  // Set user agent
         curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );      // Return output as string rather than outputting it
         curl_setopt( $ch, CURLOPT_HEADER, false );             // Don't include header in output
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 2 );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, true );
         curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
         
         // Standard settings
@@ -244,7 +240,6 @@ function pfValidData( $pfHost = 'www.payfast.co.za', $pfParamString = '' )
                 $response .= $line;
             }
         }
-        
     }
 
     pflog( "Response:\n". print_r( $response, true ) );

@@ -47,23 +47,25 @@ class GFPayFast extends GFPaymentAddOn
     {
         $description = '
 			<p style="text-align: left;">' .
-            __( 'You will need a PayFast account in order to use the PayFast Add-On.', 'gravityformspayfast' ) .
+            sprintf( __( 'You will need a PayFast account in order to use the PayFast Add-On. Navigate to %sPayFast%s to register.', 'gravityformspayfast'), '<a href="https://www.payfast.co.za" target="_blank">', '</a>' ) .
             '</p>
 			<ul>
-				<li>' . sprintf( __( 'Go to the %sPayFast Website%s in order to register an account.', 'gravityformspayfast' ), '<a href="https://www.payfast.page" target="_blank">', '</a>' ) . '</li>' .
-            '<li>' . __( 'Check \'I understand\' and click on \'Update Settings\' in order to proceed.', 'gravityformspayfast' ) . '</li>' .
+				<li>' . __( 'The PayFast settings are configured per form. Navigate to \'Forms\' -> select \'Settings\' for the form, and select the \'PayFast\' tab.', 'gravityformspayfast' ) . '</li>' .
+                '<li>' . __( 'From there, click \'Add New\' to configure PayFast feed settings for the currently selected form.', 'gravityformspayfast' ) . '</li>' .
             '</ul>
-				<br/>';
+			<p style="text-align: left;">' .
+                __( 'Enable \'Debug\' below to log the server-to-server communication between PayFast and your website, for each transaction. The log file for debugging can be found at /wp-content/plugins/gravityformspayfast/payfast.log. If activated, be sure to protect it by adding an .htaccess file in the same directory. If not, the file will be readable by anyone. ', 'gravityformspayfast') .
+            '</p>';
         return array(
             array(
-                'title'       => '',
+                'title'       => esc_html__( 'How to configure PayFast', 'gravityformspayfast' ),
                 'description' => $description,
                 'fields'      => array(
                     array(
-                        'name'    => 'gf_payfast_configured',
-                        'label'   => __( 'I understand', 'gravityformspayfast' ),
+                        'name'    => 'gf_payfast_debug',
+                        'label'   => esc_html__( 'PayFast Debug', 'gravityformspayfast' ),
                         'type'    => 'checkbox',
-                        'choices' => array( array( 'label' => __( '', 'gravityformspayfast' ), 'name' => 'gf_payfast_configured' ) )
+                        'choices' => array( array( 'label' => __( '', 'gravityformspayfast' ), 'name' => 'gf_payfast_debug' ) )
                     ),
                     array(
                         'type' => 'save',
@@ -590,7 +592,7 @@ class GFPayFast extends GFPaymentAddOn
             $passPhrase = $feed['meta']['passphrase'];
         }
 
-        $custom_field = $entry['id'] . '|' . wp_hash($entry['id']);
+//        $custom_field = $entry['id'] . '|' . wp_hash($entry['id']);
         $pfNotifications = rgars( $feed, 'meta/selectedNotifications' );
 
         $varArray = array(
@@ -630,7 +632,7 @@ class GFPayFast extends GFPaymentAddOn
 
         $varArray['custom_int2'] = $form['id'];
 
-        $varArray['custom_str1'] = 'PF_GRAVITYFORMS_2.3_'.constant( 'PF_MODULE_VER' );
+        $varArray['custom_str1'] = 'PF_GRAVITYFORMS_'.constant( 'PF_SOFTWARE_VER' ).'_'.constant( 'PF_MODULE_VER' );
 
         if ( !is_null( $pfNotifications[0] ) )
         {
@@ -868,18 +870,18 @@ class GFPayFast extends GFPaymentAddOn
     //customer email function
     public function customer_email ( $feed, $lead )
     {
-        $cutomer_email = '';
+        $customer_email = '';
         foreach ( $this->get_customer_fields() as $field )
         {
             $field_id = $feed['meta'][ $field['meta_name'] ];
             $value = rgar( $lead, $field_id );
             if ( !empty( $value ) && $field['name'] == 'email')
             {
-                $cutomer_email = $value;
+                $customer_email = $value;
             }
         }
 
-        return $cutomer_email;
+        return $customer_email;
     }
 
     public function customer_query_string( $feed, $lead )
@@ -1076,6 +1078,8 @@ class GFPayFast extends GFPaymentAddOn
             $user_name = $user_data->display_name;
         }
 
+        // Include the PayFast common file
+        define( 'PF_DEBUG', $this->get_plugin_setting( 'gf_payfast_debug' ) );
         require_once( 'payfast_common.inc' );
 
         $status = $pfData['payment_status'];
