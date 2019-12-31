@@ -1272,6 +1272,9 @@ class GFPayFast extends GFPaymentAddOn
                         GFCommon::send_notifications( $notificationClientId, $form, $entry, true, 'form_submission' );
                     }
 
+                    // Perform any custom actions
+                    do_action('gform_payfast_payment_complete', $pfData);
+
                     break;
 
                 case 'CANCELLED':
