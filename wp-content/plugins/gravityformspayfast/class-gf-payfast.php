@@ -1284,6 +1284,9 @@ class GFPayFast extends GFPaymentAddOn
                     GFAPI::update_entry_property( $pfData['m_payment_id'], 'payment_status', 'Cancelled' );
                     GFFormsModel::add_note( $pfData['m_payment_id'], 0, 'PayFast', $note, 'Cancelled' );
 
+                    // Perform any custom actions
+                    do_action('gform_payfast_payment_cancelled', $pfData);
+
                     break;
 
                 case 'processed' :
