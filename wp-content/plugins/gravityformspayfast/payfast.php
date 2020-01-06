@@ -3,7 +3,7 @@
 Plugin Name:  Gravity Forms PayFast Add-On
 Plugin URI:   http://www.gravityforms.com
 Description:  Integrates Gravity Forms with PayFast, a South African payment gateway.
-Version:      1.4.0
+Version:      1.5.0
 Author:       PayFast
 Author URI:   http://www.payfast.co.za
 Text Domain:  gravityformspayfast
