@@ -1272,6 +1272,9 @@ class GFPayFast extends GFPaymentAddOn
                         GFCommon::send_notifications( $notificationClientId, $form, $entry, true, 'form_submission' );
                     }
 
+                    // Perform any custom actions
+                    do_action('gform_payfast_payment_complete', $pfData);
+
                     break;
 
                 case 'CANCELLED':
@@ -1280,6 +1283,9 @@ class GFPayFast extends GFPaymentAddOn
                     $note = sprintf( esc_html__( 'Subscription Cancelled. Entry Id: %s', 'gravityforms' ), $pfData['m_payment_id'] );
                     GFAPI::update_entry_property( $pfData['m_payment_id'], 'payment_status', 'Cancelled' );
                     GFFormsModel::add_note( $pfData['m_payment_id'], 0, 'PayFast', $note, 'Cancelled' );
+
+                    // Perform any custom actions
+                    do_action('gform_payfast_payment_cancelled', $pfData);
 
                     break;
 
