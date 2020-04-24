@@ -283,9 +283,9 @@ class GFPayFast extends GFPaymentAddOn
             'tooltip' => '<h6>' . esc_html__( 'Initial Amount', 'gravityforms' ) . '</h6>' . esc_html__( "Select which field determines the initial payment amount, or select 'Form Total' to use the total of all pricing fields as the recurring amount.", 'gravityforms' ),
         );
         $default_settings = parent::add_field_after( 'recurringAmount', $initial, $default_settings );
-        
+
         $default_settings = parent::add_field_after( 'initialAmount', $freq, $default_settings );
-        
+
 
         $cycles  = array(
             'name'       => 'cycles',
@@ -578,7 +578,7 @@ class GFPayFast extends GFPaymentAddOn
 
         //URL that will listen to notifications from PayFast
         $itn_url = get_bloginfo('url') . '/?page=gf_payfast_itn';
-        
+
         if ( ( $feed['meta']['mode'] == 'test' ) and ( empty( $feed['meta']['payfastMerchantId'] ) ) or ( empty( $feed['meta']['payfastMerchantKey'] ) ) )
         {
             $merchant_id = '10004002';
@@ -621,8 +621,8 @@ class GFPayFast extends GFPaymentAddOn
         else
         {
             $varArray['amount'] = GFCommon::get_order_total( $form, $entry );
-        }       
-        
+        }
+
         $varArray['item_name'] = $form['title'];
 
         if ( $feed['meta']['mode'] != 'production' )
@@ -668,7 +668,7 @@ class GFPayFast extends GFPaymentAddOn
             {
                 $varArray['recurring_amount'] = GFCommon::get_order_total( $form, $entry );
             }
-           
+
             $varArray['frequency'] = rgar($feed['meta'], 'frequency');
             $varArray['cycles'] = rgar($feed['meta'], 'cycles');
         }
@@ -1197,16 +1197,16 @@ class GFPayFast extends GFPaymentAddOn
             $form = GFFormsModel::get_form_meta( $pfData['custom_int2'] );
             $notifications = GFCommon::get_notifications( 'form_submission', $form );
 
-            if ( !empty( $pfData['custom_str1'] ) )
-            {
-                $sendAdminMail = true;
-                $notificationAdminId = array( $pfData['custom_str1'] );
-            }
-
             if ( !empty( $pfData['custom_str2'] ) )
             {
+                $sendAdminMail = true;
+                $notificationAdminId = array( $pfData['custom_str2'] );
+            }
+
+            if ( !empty( $pfData['custom_str3'] ) )
+            {
                 $sendUserMail = true;
-                $notificationClientId = array( $pfData['custom_str2'] );
+                $notificationClientId = array( $pfData['custom_str3'] );
             }
 
             //    self::log_debug('Check status and update order');
@@ -1216,11 +1216,11 @@ class GFPayFast extends GFPaymentAddOn
                     pflog( '- Complete' );
 
                     //If delayed post set it now
-                    if ( $pfData['custom_str3'] == 'delayPost' )
+                    if ( $pfData['custom_str4'] == 'delayPost' )
                     {
                         $entry['post_id'] = GFFormsModel::create_post( $form, $entry );
                     }
-                    
+
                     //creates transaction
                     if ( empty( $pfData['token'] ) || strtotime( $pfData['custom_str4'] ) <= strtotime( gmdate( 'Y-m-d' ). '+ 2 days' ) )
                     {
@@ -1766,7 +1766,7 @@ class GFPayFast extends GFPaymentAddOn
                     'disableShipping' => rgar( $old_feed['meta'], 'disable_shipping' ),
                     'recurringAmount' => rgar( $old_feed['meta'], 'recurring_amount_field' ) == 'all' ? 'form_total' : rgar( $old_feed['meta'], 'recurring_amount_field' ),
                     'recurring_amount_field' => rgar( $old_feed['meta'], 'recurring_amount_field' ), //For backwards compatibility of the delayed payment feature
-                    'initialAmount' => rgar( $old_feed['meta'], 'initialAmount' ), 
+                    'initialAmount' => rgar( $old_feed['meta'], 'initialAmount' ),
                     'recurringTimes' => rgar( $old_feed['meta'], 'recurring_times' ),
                     'recurringRetry' => rgar( $old_feed['meta'], 'recurring_retry' ),
                     'paymentAmount' => 'form_total',
