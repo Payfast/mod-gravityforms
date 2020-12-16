@@ -286,6 +286,8 @@ class GFPayFast extends GFPaymentAddOn
 
         $default_settings = parent::add_field_after( 'initialAmount', $freq, $default_settings );
 
+      
+
 
         $cycles  = array(
             'name'       => 'cycles',
