@@ -1159,7 +1159,7 @@ class GFPayFast extends GFPaymentAddOn
         //// Get internal cart
         if( !$pfError && !$pfDone )
         {
-            $order_info = $entry+$config;
+            $order_info = $entry;
             pflog( "Purchase:\n". print_r( $order_info, true )  );
             self::log_debug( "Purchase:\n". print_r( $order_info, true )  );
         }
