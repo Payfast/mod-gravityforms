@@ -10,7 +10,7 @@
 define( 'PF_SOFTWARE_NAME', 'GravityForms' );
 define( 'PF_SOFTWARE_VER', '1.9.*' );
 define( 'PF_MODULE_NAME', 'PayFast-GravityForms' );
-define( 'PF_MODULE_VER', '1.5.1' );
+define( 'PF_MODULE_VER', '1.5.2' );
 
 // Features
 // - PHP
