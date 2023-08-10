@@ -27,10 +27,4 @@ You will not be able to directly “test” a specific payment method (such as c
 but you don’t really need to. The inputs to and outputs from PayFast are exactly the same, no matter which payment
 method is used, so using the wallet will give you exactly the same results as if you had used another payment method.
 
-***************************************************************************
-
-Please see the URL below for all information concerning this module:
-
-          https://www.payfast.co.za/shopping-carts/gravity-forms/
-
-***************************************************************************
+Please [click here](https://payfast.io/integration/shopping-carts/gravity-forms/) for more information concerning this module.
