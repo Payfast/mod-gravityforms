@@ -1,9 +1,8 @@
 # mod-gravityforms
 
 PayFast Add-on for Gravity Forms v2.6.8
-------------------------------------------------------------------------------
 
-INTEGRATION:
+Installation
 
 1. Unzip the module to a temporary location on your computer
 2. Copy the “gravityformspayfast” folder in the archive to your base "wp-content/plugins” folder
