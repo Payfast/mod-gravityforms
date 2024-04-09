@@ -1,5 +1,0 @@
-= 1.5.3 - January 6, 2023 =
-* Test Wordpress 6.1.1 and Gravity Forms 2.6.8.
-* Update for PHP 8.0.
-* Bug fixes and improvements.
-* Add support for Payment Complete event.

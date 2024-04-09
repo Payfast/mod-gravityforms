@@ -1,18 +1,15 @@
 <?php
 
 /*
-Plugin Name:  Gravity Forms PayFast Add-On
-Plugin URI:   http://www.gravityforms.com
-Description:  Integrates Gravity Forms with PayFast, a South African payment gateway.
-Version:      1.5.3
-Author:       PayFast
-Author URI:   http://www.payfast.co.za
+Plugin Name:  Gravity Forms Payfast Add-On
+Plugin URI:   https://github.com/Payfast/mod-gravityforms
+Description:  Integrates Gravity Forms with Payfast, a South African payment gateway.
+Version:      1.5.4
+Author:       Payfast (Pty) Ltd
+Author URI:   https://payfast.io
 Text Domain:  gravityformspayfast
 Domain Path:  /languages
 */
-
-include 'payfast_common.inc';
-define('GF_PAYFAST_VERSION', PF_MODULE_VER);
 
 add_action('gform_loaded', array('GF_PayFast_Bootstrap', 'load'), 5);
 
