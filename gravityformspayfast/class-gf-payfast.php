@@ -7,13 +7,6 @@ use Payfast\PayfastCommon\PayfastCommon;
 add_action('wp', array('GFPayFast', 'maybe_thankyou_page'), 5);
 GFForms::include_payment_addon_framework();
 
-//// Create user agent string
-// User agent constituents (for cURL)
-define('PF_SOFTWARE_NAME', 'GravityForms');
-define('PF_SOFTWARE_VER', '2.8.7');
-define('PF_MODULE_NAME', 'PayFast-GravityForms');
-define('PF_MODULE_VER', '1.5.4');
-define('GF_PAYFAST_VERSION', PF_SOFTWARE_VER);
 class GFPayFast extends GFPaymentAddOn
 {
     protected const DURATION_LITERAL = '+ 2 days';
@@ -21,7 +14,7 @@ class GFPayFast extends GFPaymentAddOn
     protected const H6_TAG           = '<h6>';
     protected const H6_TAG_END       = '</h6>';
     private static $_instance = null;
-    protected $_version = GF_PAYFAST_VERSION;
+    protected $_version = '2.8.13';
     protected $_min_gravityforms_version = '1.9.3';
     protected $_slug = 'gravityformspayfast';
     protected $_path = 'gravityformspayfast/payfast.php';
@@ -40,6 +33,7 @@ class GFPayFast extends GFPaymentAddOn
     // Automatic upgrade enabled
     private $production_url = 'https://www.payfast.co.za/eng/process/';
     private $sandbox_url = 'https://sandbox.payfast.co.za/eng/process/';
+    private $_pf_gf_module_ver = '1.5.5';
 
     public static function get_instance()
     {
@@ -53,7 +47,7 @@ class GFPayFast extends GFPaymentAddOn
     public static function maybe_thankyou_page()
     {
         $instance = self::get_instance();
-        if ( ! $instance->is_gravityforms_supported()) {
+        if (!$instance->is_gravityforms_supported()) {
             return;
         }
         if ($str = rgget('gf_payfast_return')) {
@@ -63,7 +57,7 @@ class GFPayFast extends GFPaymentAddOn
                 list($form_id, $lead_id) = explode('|', $query['ids']);
                 $form = GFAPI::get_form($form_id);
                 $lead = GFAPI::get_entry($lead_id);
-                if ( ! class_exists('GFFormDisplay')) {
+                if (!class_exists('GFFormDisplay')) {
                     require_once(GFCommon::get_base_path() . '/form_display.php');
                 }
                 $confirmation = GFFormDisplay::handle_confirmation($form, $lead, false);
@@ -99,7 +93,7 @@ class GFPayFast extends GFPaymentAddOn
         $payfast = GFPayFast::get_instance();
         $feed    = $payfast->get_feeds($form_id);
         //Ignore ITN messages from forms that are no longer configured with the Payfast add-on
-        if ( ! $feed) {
+        if (!$feed) {
             return false;
         }
 
@@ -150,7 +144,7 @@ class GFPayFast extends GFPaymentAddOn
                 'fields'      => array(
                     array(
                         'name'    => 'gf_payfast_debug',
-                        'label' => esc_html__('Payfast Debug', 'gravityformspayfast'),
+                        'label'   => esc_html__('Payfast Debug', 'gravityformspayfast'),
                         'type'    => 'checkbox',
                         'choices' => array(
                             array(
@@ -173,7 +167,7 @@ class GFPayFast extends GFPaymentAddOn
     public function feed_list_no_item_message()
     {
         $settings = $this->get_plugin_settings();
-        if ( ! rgar($settings, 'gf_payfast_configured')) {
+        if (!rgar($settings, 'gf_payfast_configured')) {
             return sprintf(
                 __('To get started, configure your %sPayfast Settings%s!', 'gravityformspayfast'),
                 '<a href="' . admin_url('admin.php?page=gf_settings&subview=' . $this->_slug) . '">',
@@ -191,33 +185,33 @@ class GFPayFast extends GFPaymentAddOn
         $fields           = array(
             array(
                 'name'     => 'payfastMerchantId',
-                'label'   => __('Payfast Merchant ID ', 'gravityformspayfast'),
+                'label'    => __('Payfast Merchant ID ', 'gravityformspayfast'),
                 'type'     => 'text',
                 'class'    => 'medium',
                 'required' => false,
-                'tooltip' => self::H6_TAG . __('Payfast Merchant ID', 'gravityformspayfast') . self::H6_TAG_END . __(
+                'tooltip'  => self::H6_TAG . __('Payfast Merchant ID', 'gravityformspayfast') . self::H6_TAG_END . __(
                         'Enter your Payfast Merchant ID.',
                         'gravityformspayfast'
                     )
             ),
             array(
                 'name'     => 'payfastMerchantKey',
-                'label'   => __('Payfast Merchant Key ', 'gravityformspayfast'),
+                'label'    => __('Payfast Merchant Key ', 'gravityformspayfast'),
                 'type'     => 'text',
                 'class'    => 'medium',
                 'required' => false,
-                'tooltip' => self::H6_TAG . __('Payfast Merchant Key', 'gravityformspayfast') . self::H6_TAG_END . __(
+                'tooltip'  => self::H6_TAG . __('Payfast Merchant Key', 'gravityformspayfast') . self::H6_TAG_END . __(
                         'Enter your Payfast Merchant Key.',
                         'gravityformspayfast'
                     )
             ),
             array(
                 'name'     => 'passphrase',
-                'label'   => __('Payfast Passphrase ', 'gravityformspayfast'),
+                'label'    => __('Payfast Passphrase ', 'gravityformspayfast'),
                 'type'     => 'text',
                 'class'    => 'medium',
                 'required' => false,
-                'tooltip' => self::H6_TAG . __('Payfast Passphrase', 'gravityformspayfast') . self::H6_TAG_END . __(
+                'tooltip'  => self::H6_TAG . __('Payfast Passphrase', 'gravityformspayfast') . self::H6_TAG_END . __(
                         'Only enter a passphrase if it is set on your Payfast account.',
                         'gravityformspayfast'
                     )
@@ -555,9 +549,9 @@ class GFPayFast extends GFPaymentAddOn
         <ul id="gf_payfast_notification_container" style="padding-left:20px; margin-top:10px; <?php
         echo $has_delayed_notifications ? '' : 'display:none;' ?>">
             <?php
-            if ( ! empty($form) && is_array($form['notifications'])) {
+            if (!empty($form) && is_array($form['notifications'])) {
                 $selected_notifications = $this->get_setting('selectedNotifications');
-                if ( ! is_array($selected_notifications)) {
+                if (!is_array($selected_notifications)) {
                     $selected_notifications = array();
                 }
                 $notifications = GFCommon::get_notifications('form_submission', $form);
@@ -660,9 +654,8 @@ class GFPayFast extends GFPaymentAddOn
 
     public function redirect_url($feed, $submission_data, $form, $entry)
     {
-
         //Don't process redirect url if request is a Payfast return
-        if ( ! rgempty('gf_payfast_return', $_GET)) {
+        if (!rgempty('gf_payfast_return', $_GET)) {
             return false;
         }
 
@@ -696,11 +689,11 @@ class GFPayFast extends GFPaymentAddOn
             'return_url'   => $return_url
         );
 
-        if ( ! empty($cancel_url)) {
+        if (!empty($cancel_url)) {
             $varArray['cancel_url'] = $cancel_url;
         }
 
-        $varArray['notify_url']    = $itn_url;
+        $varArray['notify_url'] = $itn_url;
 
         if ($form["pagination"] === null) {
             $varArray['email_address'] = $this->customer_email($feed, $entry);
@@ -710,11 +703,11 @@ class GFPayFast extends GFPaymentAddOn
             }
         }
 
-        $varArray['m_payment_id']  = $entry['id'];
+        $varArray['m_payment_id'] = $entry['id'];
 
-        if (($feed['meta']['transactionType'] == 'subscription') && ($feed['meta']['initialAmount'] != 'form_total') && ! empty($entry['' . $feed['meta']['initialAmount'] . '.2'])) {
+        if (($feed['meta']['transactionType'] == 'subscription') && ($feed['meta']['initialAmount'] != 'form_total') && !empty($entry['' . $feed['meta']['initialAmount'] . '.2'])) {
             $varArray['amount'] = str_replace(",", "", substr($entry['' . $feed['meta']['initialAmount'] . '.2'], 1));
-        } elseif (($feed['meta']['transactionType'] == 'subscription') && $feed['meta']['initialAmount'] == 'form_total' && ! empty($entry['' . $feed['meta']['initialAmount']])) {
+        } elseif (($feed['meta']['transactionType'] == 'subscription') && $feed['meta']['initialAmount'] == 'form_total' && !empty($entry['' . $feed['meta']['initialAmount']])) {
             $varArray['amount'] = substr(
                 $entry['' . $feed['meta']['initialAmount']],
                 strpos($entry['' . $feed['meta']['initialAmount']], '|') + 1
@@ -731,7 +724,7 @@ class GFPayFast extends GFPaymentAddOn
 
         $varArray['custom_int2'] = $form['id'];
 
-        $varArray['custom_str1'] = 'PF_GRAVITYFORMS_' . constant('PF_SOFTWARE_VER') . '_' . constant('PF_MODULE_VER');
+        $varArray['custom_str1'] = 'PF_GRAVITYFORMS_' . $this->_version . '_' . $this->_pf_gf_module_ver;
 
 
         $varArray['custom_str2'] = $pfNotifications[0] ?? '';
@@ -749,14 +742,14 @@ class GFPayFast extends GFPaymentAddOn
             $varArray['billing_date']      = gmdate('Y-m-d');
 
             if (($feed['meta']['recurring_amount_field'] != 'form_total')
-                && ! empty($entry['' . $feed['meta']['recurring_amount_field'] . '.2'])) {
+                && !empty($entry['' . $feed['meta']['recurring_amount_field'] . '.2'])) {
                 $varArray['recurring_amount'] = str_replace(
-                        ",",
-                        "",
-                        substr($entry['' . $feed['meta']['recurring_amount_field'] . '.2'], 1)
+                    ",",
+                    "",
+                    substr($entry['' . $feed['meta']['recurring_amount_field'] . '.2'], 1)
                 );
             } elseif (($feed['meta']['recurring_amount_field'] != 'form_total')
-                && ! empty($entry['' . $feed['meta']['recurring_amount_field']])) {
+                      && !empty($entry['' . $feed['meta']['recurring_amount_field']])) {
                 $varArray['recurring_amount'] = substr(
                     $entry['' . $feed['meta']['recurring_amount_field']],
                     strpos(
@@ -788,7 +781,7 @@ class GFPayFast extends GFPaymentAddOn
 
         $secureString = '?';
         foreach ($varArray as $k => $v) {
-            if ( ! is_null($v)) {
+            if (!is_null($v)) {
                 $secureString .= $k . '=' . urlencode(trim($v)) . '&';
             }
         }
@@ -803,7 +796,7 @@ class GFPayFast extends GFPaymentAddOn
         $secureSig    = md5($query_string);
         $secureString .= '&signature=' . $secureSig;
 
-        if ( ! $query_string) {
+        if (!$query_string) {
             $this->log_debug(
                 __METHOD__ . '(): NOT sending to Payfast: The price is either zero or the gform_payfast_query filter was used to remove the querystring that is sent to Payfast.'
             );
@@ -846,13 +839,13 @@ class GFPayFast extends GFPaymentAddOn
                 $is_shipping  = rgar($item, 'is_shipping');
                 if ($is_shipping) {
                     //populate shipping info
-                    $shipping .= ! empty($unit_price) ? "&shipping_1={$unit_price}" : '';
+                    $shipping .= !empty($unit_price) ? "&shipping_1={$unit_price}" : '';
                 } else {
                     //add product info to querystring
                     $query_string .= "&item_name_{$product_index}={$product_name}&amount_{$product_index}={$unit_price}&quantity_{$product_index}={$quantity}";
                 }
                 //add options
-                if ( ! empty($options) && is_array($options)) {
+                if (!empty($options) && is_array($options)) {
                     $option_index = 1;
                     foreach ($options as $option) {
                         $option_label = urlencode($option['field_label']);
@@ -892,9 +885,9 @@ class GFPayFast extends GFPaymentAddOn
                 $options         = rgar($item, 'options');
                 $is_shipping     = rgar($item, 'is_shipping');
                 $product_options = '';
-                if ( ! $is_shipping) {
+                if (!$is_shipping) {
                     //add options
-                    if ( ! empty($options) && is_array($options)) {
+                    if (!empty($options) && is_array($options)) {
                         $product_options = ' (';
                         foreach ($options as $option) {
                             $product_options .= $option['option_name'] . ', ';
@@ -905,7 +898,7 @@ class GFPayFast extends GFPaymentAddOn
                 }
             }
         }
-        if ( ! empty($purpose)) {
+        if (!empty($purpose)) {
             $purpose = substr($purpose, 0, strlen($purpose) - 2);
         }
         $purpose = urlencode($purpose);
@@ -926,7 +919,7 @@ class GFPayFast extends GFPaymentAddOn
         foreach ($this->get_customer_fields() as $field) {
             $field_id = $feed['meta'][$field['meta_name']];
             $value    = rgar($lead, $field_id);
-            if ( ! empty($value) && $field['name'] == 'email') {
+            if (!empty($value) && $field['name'] == 'email') {
                 $customer_email = $value;
             }
         }
@@ -949,7 +942,7 @@ class GFPayFast extends GFPaymentAddOn
                     $value
                 ) : GFCommon::get_us_state_code($value);
             }
-            if ( ! empty($value)) {
+            if (!empty($value)) {
                 $fields .= "&{$field['name']}=" . urlencode($value);
             }
         }
@@ -1043,11 +1036,11 @@ class GFPayFast extends GFPaymentAddOn
     {
         $feed            = $this->get_payment_feed($entry);
         $submission_data = $this->get_submission_data($feed, $form, $entry);
-        if ( ! $feed || empty($submission_data['payment_amount'])) {
+        if (!$feed || empty($submission_data['payment_amount'])) {
             return $is_disabled;
         }
 
-        return ! rgempty('delayPost', $feed['meta']);
+        return !rgempty('delayPost', $feed['meta']);
     }
 
     //------- PROCESSING PAYFAST ITN (Callback) -----------//
@@ -1056,7 +1049,7 @@ class GFPayFast extends GFPaymentAddOn
     {
         $feed            = $this->get_payment_feed($entry);
         $submission_data = $this->get_submission_data($feed, $form, $entry);
-        if ( ! $feed || empty($submission_data['payment_amount'])) {
+        if (!$feed || empty($submission_data['payment_amount'])) {
             return $is_disabled;
         }
         $selected_notifications = is_array(rgar($feed['meta'], 'selectedNotifications')) ? rgar(
@@ -1073,7 +1066,7 @@ class GFPayFast extends GFPaymentAddOn
     public function get_payment_feed($entry, $form = false)
     {
         $feed = parent::get_payment_feed($entry, $form);
-        if (empty($feed) && ! empty($entry['id'])) {
+        if (empty($feed) && !empty($entry['id'])) {
             //looking for feed created by legacy versions
             $feed = $this->get_payfast_feed_by_entry($entry['id']);
         }
@@ -1086,13 +1079,12 @@ class GFPayFast extends GFPaymentAddOn
         $feed_id = gform_get_meta($entry_id, 'payfast_feed_id');
         $feed    = $this->get_feed($feed_id);
 
-        return ! empty($feed) ? $feed : false;
+        return !empty($feed) ? $feed : false;
     }
 
     public function process_itn()
     {
-        // Include the Payfast common file
-        define('PF_DEBUG', $this->get_plugin_setting('gf_payfast_debug'));
+        $payfastCommon = new PayfastCommon($this->get_plugin_setting('gf_payfast_debug') === '1');
 
         $feed = $this->get_feeds($_POST['custom_int2']);
 
@@ -1101,12 +1093,12 @@ class GFPayFast extends GFPaymentAddOn
         $pfError       = false;
         $pfErrMsg      = '';
         $pfDone        = false;
-        $pfData        = PayfastCommon::pfGetData();
+        $pfData        = $payfastCommon->pfGetData();
         $pfParamString = '';
 
         $entry = GFAPI::get_entry($pfData['m_payment_id']);
         //Ignore orphan ITN messages (ones without an entry)
-        if ( ! $entry) {
+        if (!$entry) {
             self::log_error("Entry could not be found. Aborting.");
 
             return;
@@ -1114,45 +1106,45 @@ class GFPayFast extends GFPaymentAddOn
 
         self::log_debug("Entry has been found." . print_r($entry, true));
 
-        PayfastCommon::pflog('Payfast ITN call received');
+        $payfastCommon->pflog('Payfast ITN call received');
         self::log_debug('Payfast ITN call received');
 
-        if ( ! $pfError && ! $pfDone) {
+        if (!$pfError && !$pfDone) {
             //// Notify Payfast that information has been received
             header('HTTP/1.0 200 OK');
             flush();
             //// Get data sent by Payfast
-            PayfastCommon::pflog('Get posted data');
+            $payfastCommon->pflog('Get posted data');
             // Posted variables from ITN
-            PayfastCommon::pflog('Payfast Data: ' . print_r($pfData, true));
+            $payfastCommon->pflog('Payfast Data: ' . print_r($pfData, true));
             self::log_debug('Get posted data');
             if ($pfData === false) {
                 $pfError  = true;
-                $pfErrMsg = PayfastCommon::PF_ERR_BAD_ACCESS;
+                $pfErrMsg = $payfastCommon->PF_ERR_BAD_ACCESS;
             }
         }
         //// Verify security signature
-        if ( ! $pfError && ! $pfDone) {
-            PayfastCommon::pflog('Verify security signature');
+        if (!$pfError && !$pfDone) {
+            $payfastCommon->pflog('Verify security signature');
 
             $passPhrase   = $feed[0]['meta']['passphrase'];
             $pfPassPhrase = empty($passPhrase) ? null : $passPhrase;
 
             // If signature different, log for debugging
-            if ( ! PayfastCommon::pfValidSignature($pfData, $pfParamString, $pfPassPhrase)) {
+            if (!$payfastCommon->pfValidSignature($pfData, $pfParamString, $pfPassPhrase)) {
                 $pfError  = true;
-                $pfErrMsg = PayfastCommon::PF_ERR_INVALID_SIGNATURE;
+                $pfErrMsg = $payfastCommon->PF_ERR_INVALID_SIGNATURE;
             }
         }
         //// Get internal cart
-        if ( ! $pfError && ! $pfDone) {
+        if (!$pfError && !$pfDone) {
             $order_info = $entry;
-            PayfastCommon::pflog("Purchase:\n" . print_r($order_info, true));
+            $payfastCommon->pflog("Purchase:\n" . print_r($order_info, true));
             self::log_debug("Purchase:\n" . print_r($order_info, true));
         }
         //// Verify data received
-        if ( ! $pfError) {
-            PayfastCommon::pflog('Verify data received');
+        if (!$pfError) {
+            $payfastCommon->pflog('Verify data received');
             self::log_debug('Verify data received');
 
             $pfHost = 'www.payfast.co.za';
@@ -1161,29 +1153,36 @@ class GFPayFast extends GFPaymentAddOn
                 $pfHost = 'sandbox.payfast.co.za';
             }
 
-            $pfValid = PayfastCommon::pfValidData($pfHost, $pfParamString);
+            $moduleInfo = [
+                "pfSoftwareName"       => 'GravityForms',
+                "pfSoftwareVer"        => $this->_version,
+                "pfSoftwareModuleName" => 'Payfast-GravityForms',
+                "pfModuleVer"          => $this->_pf_gf_module_ver,
+            ];
+
+            $pfValid = $payfastCommon->pfValidData($moduleInfo, $pfHost, $pfParamString);
             if ($pfValid) {
                 self::log_debug("ITN message successfully verified by Payfast");
-                PayfastCommon::pflog("ITN message successfully verified by Payfast");
+                $payfastCommon->pflog("ITN message successfully verified by Payfast");
             } else {
                 $pfError  = true;
-                $pfErrMsg = PayfastCommon::PF_ERR_BAD_ACCESS;
+                $pfErrMsg = $payfastCommon->PF_ERR_BAD_ACCESS;
             }
         }
         //// Check status and update order
-        if ( ! $pfError && ! $pfDone) {
-            PayfastCommon::pflog('Check status and update order');
+        if (!$pfError && !$pfDone) {
+            $payfastCommon->pflog('Check status and update order');
             $sendAdminMail = false;
             $sendUserMail  = false;
             $entry         = GFAPI::get_entry($pfData['m_payment_id']);
             $form          = GFFormsModel::get_form_meta($pfData['custom_int2']);
 
-            if ( ! empty($pfData['custom_str2'])) {
+            if (!empty($pfData['custom_str2'])) {
                 $sendAdminMail       = true;
                 $notificationAdminId = array($pfData['custom_str2']);
             }
 
-            if ( ! empty($pfData['custom_str3'])) {
+            if (!empty($pfData['custom_str3'])) {
                 $sendUserMail         = true;
                 $notificationClientId = array($pfData['custom_str3']);
             }
@@ -1195,12 +1194,13 @@ class GFPayFast extends GFPaymentAddOn
                 $sendAdminMail,
                 $notificationAdminId,
                 $sendUserMail,
-                $notificationClientId
+                $notificationClientId,
+                $payfastCommon
             );
         }
 
         if ($pfError) {
-            PayfastCommon::pflog('Error occured: ' . $pfErrMsg);
+            $payfastCommon->pflog('Error occured: ' . $pfErrMsg);
         }
     }
 
@@ -1220,7 +1220,7 @@ class GFPayFast extends GFPaymentAddOn
         //allow the user to do some other kind of validation of the hash
         $hash_matches = apply_filters('gform_payfast_hash_matches', $hash_matches, $entry_id, $hash, $custom_field);
         //Validates that Entry Id wasn't tampered with
-        if ( ! rgpost('test_itn') && ! $hash_matches) {
+        if (!rgpost('test_itn') && !$hash_matches) {
             $this->log_error(
                 __METHOD__ . "(): Entry Id verification failed. Hash does not match. Custom field: {$custom_field}. Aborting."
             );
@@ -1241,7 +1241,7 @@ class GFPayFast extends GFPaymentAddOn
     public function modify_post($post_id, $action): bool
     {
         $result = false;
-        if ( ! $post_id) {
+        if (!$post_id) {
             return false;
         }
         switch ($action) {
@@ -1349,7 +1349,7 @@ class GFPayFast extends GFPaymentAddOn
 
         <div class="wrap about-wrap">
             <h1><?php
-                _e('Payfast Add-On v' . constant('PF_MODULE_VER'), 'gravityformspayfast') ?></h1>
+                _e('Payfast Add-On v' . $this->_pf_gf_module_ver, 'gravityformspayfast') ?></h1>
             <div class="about-text"><?php
                 _e(
                     'Thank you for updating! The new version of the Gravity Forms Payfast Add-On makes changes to how you manage your Payfast integration.',
@@ -1388,12 +1388,12 @@ class GFPayFast extends GFPaymentAddOn
     {
         //allow the payment status to be edited when for payfast, not set to Approved/Paid, and not a subscription
         if (
-            ! $this->is_payment_gateway($lead['id']) || strtolower(
-                                                            rgpost('save')
-                                                        ) <> 'edit' || $payment_status == 'Approved' || $payment_status == 'Paid' || rgar(
-                                                                                                                                         $lead,
-                                                                                                                                         'transaction_type'
-                                                                                                                                     ) == 2
+            !$this->is_payment_gateway($lead['id']) || strtolower(
+                                                           rgpost('save')
+                                                       ) <> 'edit' || $payment_status == 'Approved' || $payment_status == 'Paid' || rgar(
+                                                                                                                                        $lead,
+                                                                                                                                        'transaction_type'
+                                                                                                                                    ) == 2
         ) {
             return $payment_status;
         }
@@ -1409,7 +1409,7 @@ class GFPayFast extends GFPaymentAddOn
     public function admin_edit_payment_date($payment_date, $form, $lead)
     {
         //allow the payment date to be edited
-        if ( ! $this->is_payment_gateway($lead['id']) || strtolower(rgpost('save')) <> 'edit') {
+        if (!$this->is_payment_gateway($lead['id']) || strtolower(rgpost('save')) <> 'edit') {
             return $payment_date;
         }
         $payment_date = $lead['payment_date'];
@@ -1423,7 +1423,7 @@ class GFPayFast extends GFPaymentAddOn
     public function admin_edit_payment_transaction_id($transaction_id, $form, $lead)
     {
         //allow the transaction ID to be edited
-        if ( ! $this->is_payment_gateway($lead['id']) || strtolower(rgpost('save')) <> 'edit') {
+        if (!$this->is_payment_gateway($lead['id']) || strtolower(rgpost('save')) <> 'edit') {
             return $transaction_id;
         }
 
@@ -1433,7 +1433,7 @@ class GFPayFast extends GFPaymentAddOn
     public function admin_edit_payment_amount($payment_amount, $form, $lead)
     {
         //allow the payment amount to be edited
-        if ( ! $this->is_payment_gateway($lead['id']) || strtolower(rgpost('save')) <> 'edit') {
+        if (!$this->is_payment_gateway($lead['id']) || strtolower(rgpost('save')) <> 'edit') {
             return $payment_amount;
         }
         if (empty($payment_amount)) {
@@ -1446,7 +1446,7 @@ class GFPayFast extends GFPaymentAddOn
     public function admin_edit_payment_status_details($form_id, $lead)
     {
         $form_action = strtolower(rgpost('save'));
-        if ( ! $this->is_payment_gateway($lead['id']) || $form_action <> 'edit') {
+        if (!$this->is_payment_gateway($lead['id']) || $form_action <> 'edit') {
             return;
         }
         //get data from entry to pre-populate fields
@@ -1503,7 +1503,7 @@ class GFPayFast extends GFPaymentAddOn
         check_admin_referer('gforms_save_entry', 'gforms_save_entry');
         //update payment information in admin, need to use this function so the lead data is updated before displayed in the sidebar info section
         $form_action = strtolower(rgpost('save'));
-        if ( ! $this->is_payment_gateway($lead_id) || $form_action <> 'update') {
+        if (!$this->is_payment_gateway($lead_id) || $form_action <> 'update') {
             return;
         }
         //get lead
@@ -1539,7 +1539,7 @@ class GFPayFast extends GFPaymentAddOn
         $lead['payment_date']   = $payment_date;
         $lead['transaction_id'] = $payment_transaction;
         // if payment status does not equal approved/paid or the lead has already been fulfilled, do not continue with fulfillment
-        if (($payment_status == 'Approved' || $payment_status == 'Paid') && ! $lead['is_fulfilled']) {
+        if (($payment_status == 'Approved' || $payment_status == 'Paid') && !$lead['is_fulfilled']) {
             $action['id']             = $payment_transaction;
             $action['type']           = 'complete_payment';
             $action['transaction_id'] = $payment_transaction;
@@ -1569,7 +1569,7 @@ class GFPayFast extends GFPaymentAddOn
 
     public function fulfill_order(&$entry, $transaction_id, $amount, $feed = null)
     {
-        if ( ! $feed) {
+        if (!$feed) {
             $feed = $this->get_payment_feed($entry);
         }
         $form = GFFormsModel::get_form_meta($entry['form_id']);
@@ -1656,7 +1656,7 @@ class GFPayFast extends GFPaymentAddOn
             'customer_fields',
         );
         foreach ($old_feed['meta'] as $key => $value) {
-            if ( ! in_array($key, $known_meta_keys)) {
+            if (!in_array($key, $known_meta_keys)) {
                 $new_meta[$key] = $value;
             }
         }
@@ -1879,11 +1879,12 @@ class GFPayFast extends GFPaymentAddOn
         bool $sendAdminMail,
         ?array $notificationAdminId,
         bool $sendUserMail,
-        ?array $notificationClientId
+        ?array $notificationClientId,
+        PayfastCommon $payfastCommon
     ): void {
         switch ($pfData['payment_status']) {
             case 'COMPLETE':
-                PayfastCommon::pflog('- Complete');
+                $payfastCommon->pflog('- Complete');
 
                 //If delayed post set it now
                 if ($pfData['custom_str4'] == 'delayPost') {
@@ -1957,7 +1958,7 @@ class GFPayFast extends GFPaymentAddOn
 
                 if (!empty($pfData['token'])) {
                     $action = array(
-                        'amount' => $pfData['amount_gross'],
+                        'amount'          => $pfData['amount_gross'],
                         'subscription_id' => $pfData['m_payment_id']
                     );
                     GFPaymentAddOn::insert_transaction(
@@ -1984,11 +1985,11 @@ class GFPayFast extends GFPaymentAddOn
                 }
 
                 if ($sendAdminMail) {
-                    PayfastCommon::pflog('sendadminmail');
+                    $payfastCommon->pflog('sendadminmail');
                     GFCommon::send_notifications($notificationAdminId, $form, $entry, true, 'form_submission');
                 }
                 if ($sendUserMail) {
-                    PayfastCommon::pflog('sendusermail');
+                    $payfastCommon->pflog('sendusermail');
                     GFCommon::send_notifications($notificationClientId, $form, $entry, true, 'form_submission');
                 }
 
@@ -1998,7 +1999,7 @@ class GFPayFast extends GFPaymentAddOn
                 break;
 
             case 'CANCELLED':
-                PayfastCommon::pflog('Subscription Cancelled with entry ID: ' . $pfData['m_payment_id']);
+                $payfastCommon->pflog('Subscription Cancelled with entry ID: ' . $pfData['m_payment_id']);
 
                 $note = sprintf(
                     esc_html__('Subscription Cancelled. Entry Id: %s', 'gravityforms'),

@@ -1,3 +1,11 @@
+=====================================
+Version : Date : Description
+=====================================
+
+= 1.5.5 - July 04, 2024 =
+* Test Wordpress 6.5.5 and Gravity Forms 2.8.13.
+* Improve compatibility with other gateways.
+
 = 1.5.4 - April 9, 2024 =
 * Test WordPress 6.5 and Gravity Forms 2.8.7.
 * Update for PHP 8.1.

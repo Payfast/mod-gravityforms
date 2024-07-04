@@ -4,7 +4,7 @@
 Plugin Name:  Gravity Forms Payfast Add-On
 Plugin URI:   https://github.com/Payfast/mod-gravityforms
 Description:  Integrates Gravity Forms with Payfast, a South African payment gateway.
-Version:      1.5.4
+Version:      1.5.5
 Author:       Payfast (Pty) Ltd
 Author URI:   https://payfast.io
 Text Domain:  gravityformspayfast
@@ -17,7 +17,7 @@ class GF_PayFast_Bootstrap
 {
     public static function load()
     {
-        if ( ! method_exists('GFForms', 'include_payment_addon_framework')) {
+        if (!method_exists('GFForms', 'include_payment_addon_framework')) {
             return;
         }
 

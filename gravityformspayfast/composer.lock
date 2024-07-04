@@ -1,60 +1,60 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
-    ],
-    "content-hash": "1b330ff27468c529ebbc764bd41fd09f",
-    "packages": [
-        {
-            "name": "payfast/payfast-common",
-            "version": "v1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Payfast/payfast-common.git",
-                "reference": "04c664a1d49e118c85507a56de35fe85eaee6048"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Payfast/payfast-common/zipball/04c664a1d49e118c85507a56de35fe85eaee6048",
-                "reference": "04c664a1d49e118c85507a56de35fe85eaee6048",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Payfast\\PayfastCommon\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "App Inlet (Pty) Ltd",
-                    "email": "info@appinlet.com"
-                }
-            ],
-            "description": "Payfast common class for modules.",
-            "homepage": "https://github.com/PayFast/payfast-common",
-            "support": {
-                "issues": "https://github.com/Payfast/payfast-common/issues",
-                "source": "https://github.com/Payfast/payfast-common/tree/v1.0.2"
-            },
-            "time": "2024-01-29T19:49:41+00:00"
+  "_readme": [
+    "This file locks the dependencies of your project to a known state",
+    "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+    "This file is @generated automatically"
+  ],
+  "content-hash": "681a3ab5b6d33c9a799ae327de83656f",
+  "packages": [
+    {
+      "name": "payfast/payfast-common",
+      "version": "v1.1.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/Payfast/payfast-common.git",
+        "reference": "7458222d53da34ed9303dc097e6df500ba4ede17"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/Payfast/payfast-common/zipball/7458222d53da34ed9303dc097e6df500ba4ede17",
+        "reference": "7458222d53da34ed9303dc097e6df500ba4ede17",
+        "shasum": ""
+      },
+      "require": {
+        "php": "^8.0"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Payfast\\PayfastCommon\\": "src/"
         }
-    ],
-    "packages-dev": [],
-    "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
-    "prefer-stable": false,
-    "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "GPL-3.0"
+      ],
+      "authors": [
+        {
+          "name": "App Inlet (Pty) Ltd",
+          "email": "info@appinlet.com"
+        }
+      ],
+      "description": "Payfast common class for modules.",
+      "homepage": "https://github.com/PayFast/payfast-common",
+      "support": {
+        "issues": "https://github.com/Payfast/payfast-common/issues",
+        "source": "https://github.com/Payfast/payfast-common/tree/v1.1.0"
+      },
+      "time": "2024-06-07T02:30:19+00:00"
+    }
+  ],
+  "packages-dev": [],
+  "aliases": [],
+  "minimum-stability": "stable",
+  "stability-flags": [],
+  "prefer-stable": false,
+  "prefer-lowest": false,
+  "platform": [],
+  "platform-dev": [],
+  "plugin-api-version": "2.6.0"
 }
