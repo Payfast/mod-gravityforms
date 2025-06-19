@@ -8,9 +8,9 @@
  * copy, modify or distribute this plugin / code or part thereof in any way.
  */
 
-namespace Payfast\PayfastCommon;
+namespace Payfast\PayfastCommon\Aggregator\Request;
 
-class PayfastCommon
+class PaymentRequest
 {
     // General Defines
     public const PF_TIMEOUT = 15;
@@ -337,7 +337,7 @@ class PayfastCommon
      *
      * @return string
      */
-    public static function subscriptionAction(
+    public function subscriptionAction(
         $merchantID,
         $token,
         $action,
@@ -359,7 +359,7 @@ class PayfastCommon
             default => null,
         };
 
-        return self::placeRequest($url, $merchantID, $passphrase, $data, $method);
+        return $this->placeRequest($url, $merchantID, $passphrase, $data, $method);
     }
 
     /**
@@ -373,8 +373,14 @@ class PayfastCommon
      *
      * @return string
      */
-    public static function refundAction($merchantID, $passphrase, $paymentID, $action, array $data = []): string
-    {
+    public function refundAction(
+        $merchantID,
+        $passphrase,
+        $paymentID,
+        $action,
+        array $data = [],
+        $testMode = false
+    ): string {
         $url    = "https://api.payfast.co.za/refunds/";
         $method = "GET";
 
@@ -384,9 +390,9 @@ class PayfastCommon
             $method = "POST";
         }
 
-        $url .= "$paymentID?testing=true";
+        $url .= $testMode ? "$paymentID?testing=true" : "$paymentID";
 
-        return self::placeRequest($url, $merchantID, $passphrase, $data, $method);
+        return $this->placeRequest($url, $merchantID, $passphrase, $data, $method);
     }
 
     /**
@@ -397,11 +403,11 @@ class PayfastCommon
      *
      * @return string
      */
-    public static function pingPayfast($merchantID, $passphrase = null): string
+    public function pingPayfast($merchantID, $passphrase = null): string
     {
         $url = "https://api.payfast.co.za/ping?testing=true";
 
-        return self::placeRequest($url, $merchantID, $passphrase);
+        return $this->placeRequest($url, $merchantID, $passphrase);
     }
 
     /**
@@ -415,16 +421,21 @@ class PayfastCommon
      *
      * @return string
      */
-    public static function placeRequest($url, $merchantID, $passphrase = null, array $body = [], $method = null): string
+    public function placeRequest($url, $merchantID, $passphrase = null, array $body = [], $method = null): string
     {
         $date      = date("Y-m-d");
         $time      = date("H:i:s");
-        $timeStamp = $date . "T" . $time;
+        $timeStamp = $body['timestamp'] ?? $date . "T" . $time;
+        $version   = $body['version'] ?? "v1";
         $pfData    = [
             "merchant-id" => $merchantID,
             "timestamp"   => $timeStamp,
-            "version"     => "v1",
+            "version"     => $version,
         ];
+
+        if (array_key_exists('action', $body)) {
+            $body = [];
+        }
 
         $pfData = array_merge($pfData, $body);
 
@@ -432,17 +443,17 @@ class PayfastCommon
 
         $headers = [
             "merchant-id: $merchantID",
-            "version: v1",
+            "version: $version",
             "timestamp: $timeStamp",
             "signature: $signature",
         ];
 
         $ch         = curl_init();
-        $curlConfig = array(
+        $curlConfig = [
             CURLOPT_URL            => $url,
             CURLOPT_HTTPHEADER     => $headers,
             CURLOPT_RETURNTRANSFER => true,
-        );
+        ];
 
         if (!empty($body)) {
             $curlConfig[CURLOPT_POST]       = 1;
