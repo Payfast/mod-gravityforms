@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://github.com/Payfast/mod-gravityforms/releases/tag/v1.7.0)
+
+### Added
+
+- Enhanced plugin compatibility with WordPress Marketplace by adhering to updated code quality standards, improving
+  performance and security.
+- Upgraded Payfast Common Library to version 1.4.0.
+
 ## [1.6.0](https://github.com/Payfast/mod-gravityforms/releases/tag/v1.6.0)
 
 ### Added
