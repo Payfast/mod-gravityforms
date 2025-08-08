@@ -22,9 +22,9 @@ class PfGfForm extends GFPaymentAddOn
                         'Payfast Merchant ID',
                         'gravityformspayfast'
                     ) . GFPayFast::H6_TAG_END . __(
-                        'Enter your Payfast Merchant ID.',
-                        'gravityformspayfast'
-                    )
+                                  'Enter your Payfast Merchant ID.',
+                                  'gravityformspayfast'
+                              )
             ),
             array(
                 'name'     => 'payfastMerchantKey',
@@ -36,9 +36,9 @@ class PfGfForm extends GFPaymentAddOn
                         'Payfast Merchant Key',
                         'gravityformspayfast'
                     ) . GFPayFast::H6_TAG_END . __(
-                        'Enter your Payfast Merchant Key.',
-                        'gravityformspayfast'
-                    )
+                                  'Enter your Payfast Merchant Key.',
+                                  'gravityformspayfast'
+                              )
             ),
             array(
                 'name'     => 'passphrase',
@@ -50,9 +50,9 @@ class PfGfForm extends GFPaymentAddOn
                         'Payfast Passphrase',
                         'gravityformspayfast'
                     ) . GFPayFast::H6_TAG_END . __(
-                        'Only enter a passphrase if it is set on your Payfast account.',
-                        'gravityformspayfast'
-                    )
+                                  'Only enter a passphrase if it is set on your Payfast account.',
+                                  'gravityformspayfast'
+                              )
             ),
             array(
                 'name'          => 'mode',
@@ -152,17 +152,17 @@ class PfGfForm extends GFPaymentAddOn
     {
         return array(
             'name'     => 'initialAmount',
-            'label'    => esc_html__('Initial Amount', 'gravityforms'),
+            'label'    => esc_html__('Initial Amount', 'gravityformspayfast'),
             'type'     => 'select',
             'choices'  => $this->recurring_amount_choices(),
             'required' => true,
             'tooltip'  => GFPayFast::H6_TAG . esc_html__(
                     'Initial Amount',
-                    'gravityforms'
+                    'gravityformspayfast'
                 ) . GFPayFast::H6_TAG_END . esc_html__(
-                    "Select which field determines the initial payment amount, or select 'Form Total' to use the total of all pricing fields as the recurring amount.",
-                    'gravityforms'
-                ),
+                              "Select which field determines the initial payment amount, or select 'Form Total' to use the total of all pricing fields as the recurring amount.",
+                              'gravityformspayfast'
+                          ),
         );
     }
 
@@ -170,7 +170,10 @@ class PfGfForm extends GFPaymentAddOn
     {
         $form                = $this->get_current_form();
         $recurring_choices   = $this->get_payment_choices($form);
-        $recurring_choices[] = array('label' => esc_html__('Form Total', 'gravityforms'), 'value' => 'form_total');
+        $recurring_choices[] = array(
+            'label' => esc_html__('Form Total', 'gravityformspayfast'),
+            'value' => 'form_total'
+        );
 
         return $recurring_choices;
     }
@@ -184,31 +187,32 @@ class PfGfForm extends GFPaymentAddOn
     {
         $description = '
             <p style="text-align: left;">' .
-            sprintf(
-                __(
-                    'You will need a Payfast account in order to use the Payfast Add-On. Navigate to %sPayfast%s to register.',
-                    'gravityformspayfast'
-                ),
-                '<a href="https://payfast.io" target="_blank">',
-                '</a>'
-            ) .
-            '</p>
+                       sprintf(
+                       // translators: %1$s and %2$s are the opening and closing <a> tags for the Payfast link.
+                           __(
+                               'You will need a Payfast account in order to use the Payfast Add-On. Navigate to %1$sPayfast%2$s to register.',
+                               'gravityformspayfast'
+                           ),
+                           '<a href="https://payfast.io" target="_blank">',
+                           '</a>'
+                       ) .
+                       '</p>
             <ul>
                 <li>' . __(
-                'The Payfast settings are configured per form. Navigate to \'Forms\' -> select \'Settings\' for the form, and select the \'Payfast\' tab.',
-                'gravityformspayfast'
-            ) . '</li>' .
-            '<li>' . __(
-                'From there, click \'Add New\' to configure Payfast feed settings for the currently selected form.',
-                'gravityformspayfast'
-            ) . '</li>' .
-            '</ul>
+                           'The Payfast settings are configured per form. Navigate to \'Forms\' -> select \'Settings\' for the form, and select the \'Payfast\' tab.',
+                           'gravityformspayfast'
+                       ) . '</li>' .
+                       '<li>' . __(
+                           'From there, click \'Add New\' to configure Payfast feed settings for the currently selected form.',
+                           'gravityformspayfast'
+                       ) . '</li>' .
+                       '</ul>
             <p style="text-align: left;">' .
-            __(
-                'Enable \'Debug\' below to log the server-to-server communication between Payfast and your website, for each transaction. The log file for debugging can be found at /wp-content/plugins/gravityformspayfast/payfast.log. If activated, be sure to protect it by adding an .htaccess file in the same directory. If not, the file will be readable by anyone. ',
-                'gravityformspayfast'
-            ) .
-            '</p>';
+                       __(
+                           'Enable \'Debug\' below to log the server-to-server communication between Payfast and your website, for each transaction. The log file for debugging can be found at /wp-content/plugins/gravityformspayfast/payfast.log. If activated, be sure to protect it by adding an .htaccess file in the same directory. If not, the file will be readable by anyone. ',
+                           'gravityformspayfast'
+                       ) .
+                       '</p>';
 
         return array(
             array(
@@ -259,9 +263,9 @@ class PfGfForm extends GFPaymentAddOn
                         'Notifications',
                         'gravityformspayfast'
                     ) . GFPayFast::H6_TAG_END . __(
-                        "Enable this option if you would like to only send out this form's notifications after payment has been received. Leaving this option disabled will send notifications immediately after the form is submitted.",
-                        'gravityformspayfast'
-                    )
+                                 "Enable this option if you would like to only send out this form's notifications after payment has been received. Leaving this option disabled will send notifications immediately after the form is submitted.",
+                                 'gravityformspayfast'
+                             )
             ),
         );
     }

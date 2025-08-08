@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "ba962445770521ba1a94012e57c79620",
+  "content-hash": "5c35ed5821e3752f24191e0ec3344471",
   "packages": [
     {
       "name": "guzzlehttp/guzzle",
@@ -333,16 +333,16 @@
     },
     {
       "name": "payfast/payfast-common",
-      "version": "v1.2.2",
+      "version": "v1.4.0",
       "source": {
         "type": "git",
         "url": "https://github.com/Payfast/payfast-common.git",
-        "reference": "3909ea05db624fb993f3e18c39b5c50efd7653da"
+        "reference": "775d9ca164dee271e4465c471e7e380fd70a5ba1"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/Payfast/payfast-common/zipball/3909ea05db624fb993f3e18c39b5c50efd7653da",
-        "reference": "3909ea05db624fb993f3e18c39b5c50efd7653da",
+        "url": "https://api.github.com/repos/Payfast/payfast-common/zipball/775d9ca164dee271e4465c471e7e380fd70a5ba1",
+        "reference": "775d9ca164dee271e4465c471e7e380fd70a5ba1",
         "shasum": ""
       },
       "require": {
@@ -369,9 +369,9 @@
       "homepage": "https://github.com/PayFast/payfast-common",
       "support": {
         "issues": "https://github.com/Payfast/payfast-common/issues",
-        "source": "https://github.com/Payfast/payfast-common/tree/v1.2.2"
+        "source": "https://github.com/Payfast/payfast-common/tree/v1.4.0"
       },
-      "time": "2024-12-02T14:51:38+00:00"
+      "time": "2025-04-04T22:46:44+00:00"
     },
     {
       "name": "psr/http-client",
@@ -648,10 +648,10 @@
   "packages-dev": [],
   "aliases": [],
   "minimum-stability": "stable",
-  "stability-flags": {},
+  "stability-flags": [],
   "prefer-stable": false,
   "prefer-lowest": false,
-  "platform": {},
-  "platform-dev": {},
-  "plugin-api-version": "2.6.0"
+  "platform": [],
+  "platform-dev": [],
+  "plugin-api-version": "2.2.0"
 }

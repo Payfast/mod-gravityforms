@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.4.0](https://github.com/Payfast/payfast-common/releases/tag/v1.4.0)
+
+### Added
+
+- Improve Aggregator **createTransaction()** to accept **$returnForm** parameter to make it easier to debug custom
+  integration forms.
+
+## [1.3.1](https://github.com/Payfast/payfast-common/releases/tag/v1.3.1)
+
+### Fixed
+
+- Fix Error 411 on Aggregator for some servers, where POST requests require a Content-length header.
+
+## [1.3.0](https://github.com/Payfast/payfast-common/releases/tag/v1.3.0)
+
+### Added
+
+- Improve Aggregator **placeRequest()** to accept **$returnCurlRequest** parameter to make it easier to debug API calls.
+
 ## [1.2.2](https://github.com/Payfast/payfast-common/releases/tag/v1.2.2)
 
 ### Improved
